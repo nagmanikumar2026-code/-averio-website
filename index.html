@@ -2,301 +2,150 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AVerio | Luxury Accessories</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AVerio | Premium Phone Accessories</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
-:root {
-  --bg:#080a08;
-  --card:#121512;
-  --green:#c4ff38;
-  --white:#f7f8f4;
-  --muted:#a6aca0;
-  --border:#292f26;
+:root{--bg:#050705;--card:#101410;--green:#c4ff38;--line:#30392b}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:#fff;font-family:Montserrat,Arial,sans-serif}
+header{display:flex;justify-content:space-between;align-items:center;padding:17px 6%;border-bottom:1px solid #252b23;position:sticky;top:0;background:#050705;z-index:5}
+.logo{font:800 29px Cinzel,serif;letter-spacing:1px}
+.logo span{color:var(--green)}
+.logo small{display:block;font:9px Montserrat,sans-serif;letter-spacing:4px;color:#bbb;text-align:center}
+nav{display:flex;gap:20px}
+nav a{color:#fff;text-decoration:none;font-size:12px}
+nav a:hover{color:var(--green)}
+.hero{display:flex;align-items:center;justify-content:space-between;gap:25px;padding:65px 6%;background:radial-gradient(ellipse at 80% 50%,#26351b,transparent 55%)}
+.hero-text{max-width:570px}
+.label{font-size:10px;letter-spacing:4px;color:var(--green);font-weight:800}
+h1,h2,h3{font-family:Cinzel,Georgia,serif}
+h1{font-size:clamp(37px,6vw,67px);line-height:1.12;margin:20px 0}
+.green{color:var(--green)}
+p{color:#b8beb4;font-size:13px;line-height:1.8}
+.btn{display:inline-block;background:var(--green);color:#10140b;text-decoration:none;font-weight:800;font-size:12px;padding:14px 23px;border-radius:30px;margin-top:12px}
+.hero-image{width:47%;max-height:340px;object-fit:contain;filter:drop-shadow(0 0 24px #baff2430)}
+section{padding:40px 6%}
+.heading{font-size:30px;margin:12px 0 24px}
+.categories,.products{display:grid;gap:14px}
+.categories{grid-template-columns:repeat(6,minmax(0,1fr))}
+.products{grid-template-columns:repeat(5,minmax(0,1fr))}
+.card{background:linear-gradient(145deg,#151a14,#090b09);border:1px solid #30392b;border-radius:10px;overflow:hidden;transition:.25s}
+.card:hover{border-color:var(--green);transform:translateY(-4px)}
+.category{padding:10px;text-align:center}
+.category img{width:100%;height:100px;object-fit:contain}
+.category h3{font-size:12px;margin:8px 0}
+.product-img{width:100%;height:150px;object-fit:contain;background:radial-gradient(circle,#202a19,#080a08);padding:10px}
+.product-info{padding:12px}
+.product-info h3{font-size:13px;margin:5px 0}
+.price{font-size:19px;color:var(--green);font-weight:800;margin:12px 0}
+.order{display:block;text-align:center;background:var(--green);color:#10140b;text-decoration:none;padding:11px 3px;border-radius:5px;font-size:10px;font-weight:800}
+.promo{margin:0 6% 35px;padding:25px;border:1px solid var(--green);border-radius:12px;display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap;background:linear-gradient(110deg,#192511,#080a08)}
+.promo h2{font-size:32px;color:var(--green);margin:8px 0}
+footer{border-top:1px solid #30392b;padding:30px 6%;text-align:center}
+footer .logo{margin:auto;width:max-content}
+@media(max-width:750px){
+ header{padding:14px 4%}
+ .logo{font-size:22px}
+ nav{gap:10px}
+ nav a{font-size:10px}
+ .hero{padding:40px 5%;gap:8px}
+ .hero-image{width:38%}
+ h1{font-size:36px}
+ section{padding:32px 5%}
+ .categories{grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+ .products{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+ .product-img{height:130px}
+ .heading{font-size:25px}
+ .category img{height:75px}
+ .promo{margin:0 5% 30px;padding:20px}
 }
-* {box-sizing:border-box}
-html {scroll-behavior:smooth}
-body {
-  margin:0;
-  background:var(--bg);
-  color:var(--white);
-  font-family:'Montserrat',Arial,sans-serif;
-}
-header {
-  padding:20px 7%;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  border-bottom:1px solid var(--border);
-  background:#080a08;
-  position:sticky;
-  top:0;
-  z-index:10;
-}
-.logo {
-  font-family:'Cinzel',serif;
-  font-size:29px;
-  font-weight:800;
-  letter-spacing:2px;
-}
-.logo span {color:var(--green)}
-.logo small {
-  display:block;
-  font-family:'Montserrat',sans-serif;
-  font-size:9px;
-  letter-spacing:4px;
-  color:var(--muted);
-  text-align:center;
-  margin-top:2px;
-}
-nav {display:flex;gap:22px}
-nav a {
-  color:white;
-  text-decoration:none;
-  font-size:12px;
-  font-weight:600;
-}
-nav a:hover {color:var(--green)}
-.hero {
-  min-height:470px;
-  padding:75px 7%;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:25px;
-  background:radial-gradient(ellipse at 85% 50%,#24351a 0%,transparent 48%);
-}
-.hero-text {max-width:620px}
-.eyebrow {
-  color:var(--green);
-  font-size:11px;
-  letter-spacing:4px;
-  font-weight:700;
-}
-h1,h2,h3,.product-name {
-  font-family:'Cinzel',serif;
-}
-h1 {
-  font-size:clamp(38px,6vw,68px);
-  line-height:1.15;
-  margin:20px 0;
-  letter-spacing:1px;
-}
-.green {color:var(--green)}
-p {line-height:1.8;color:var(--muted);font-size:14px}
-.button {
-  display:inline-block;
-  margin-top:18px;
-  background:var(--green);
-  color:#10140b;
-  padding:15px 27px;
-  border-radius:4px;
-  text-decoration:none;
-  font-size:12px;
-  font-weight:800;
-  letter-spacing:1px;
-  transition:.25s;
-}
-.button:hover {
-  background:white;
-  transform:translateY(-3px);
-}
-.hero-art {
-  font-size:clamp(100px,20vw,190px);
-  filter:drop-shadow(0 0 35px #c4ff3840);
-}
-section {padding:55px 7%}
-.section-label {
-  color:var(--green);
-  font-size:10px;
-  letter-spacing:4px;
-  font-weight:700;
-}
-h2 {
-  font-size:clamp(25px,4vw,36px);
-  margin:13px 0 28px;
-}
-.categories,.products {
-  display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:17px;
-}
-.card {
-  background:linear-gradient(145deg,#171b16,#0e100e);
-  border:1px solid var(--border);
-  padding:20px 14px;
-  border-radius:8px;
-  transition:.3s;
-}
-.card:hover {
-  border-color:var(--green);
-  transform:translateY(-5px);
-  box-shadow:0 10px 30px #0008;
-}
-.category {text-align:center}
-.icon {font-size:39px;margin-bottom:12px}
-h3 {font-size:15px}
-.product-art {
-  height:125px;
-  display:grid;
-  place-items:center;
-  background:radial-gradient(circle,#26351d,#101310 70%);
-  border-radius:5px;
-  font-size:65px;
-}
-.product-name {font-size:15px;margin:17px 0 8px}
-.price {
-  font-size:20px;
-  font-weight:700;
-  color:var(--green);
-  margin:15px 0;
-}
-.order {
-  display:block;
-  text-align:center;
-  background:var(--green);
-  color:#111;
-  padding:12px 5px;
-  border-radius:4px;
-  font-size:11px;
-  font-weight:800;
-  text-decoration:none;
-  letter-spacing:1px;
-}
-.order:hover {background:white}
-.promo {
-  margin:10px 7% 55px;
-  padding:30px;
-  border:1px solid #647d35;
-  border-radius:8px;
-  background:linear-gradient(110deg,#1a2611,#0c0f0b);
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  flex-wrap:wrap;
-  gap:20px;
-}
-.promo h2 {color:var(--green);margin-bottom:5px}
-footer {
-  padding:40px 7%;
-  border-top:1px solid var(--border);
-  text-align:center;
-}
-footer .logo {margin-bottom:20px}
-footer p {font-size:12px}
-@media(max-width:650px) {
-  header {padding:15px 5%}
-  .logo {font-size:23px}
-  nav {gap:10px}
-  nav a {font-size:10px}
-  .hero {padding:48px 5%;min-height:350px}
-  .hero-art {font-size:75px}
-  h1 {font-size:37px}
-  section {padding:40px 5%}
-  .categories,.products {grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
-  .card {padding:13px 10px}
-  .product-art {height:95px;font-size:52px}
-  .promo {margin:5px 5% 40px;padding:22px}
-}
-@media(max-width:360px) {
-  .logo {font-size:19px}
-  nav {gap:7px}
-  nav a {font-size:9px}
-  h1 {font-size:31px}
+@media(max-width:380px){
+ .logo{font-size:18px}
+ .logo small{font-size:7px;letter-spacing:3px}
+ nav{gap:7px}
+ nav a{font-size:9px}
+ h1{font-size:30px}
+ .hero-image{width:32%}
 }
 </style>
 </head>
-
 <body>
+
 <header>
-  <div class="logo"><span>A</span>Verio
-    <small>PHONE ACCESSORIES</small>
-  </div>
+  <div class="logo"><span>A</span>Verio<small>PHONE ACCESSORIES</small></div>
   <nav>
-    <a href="#home">HOME</a>
-    <a href="#categories">CATEGORIES</a>
-    <a href="#shop">SHOP</a>
+    <a href="#home">Home</a>
+    <a href="#categories">Shop</a>
+    <a href="#products">Products</a>
   </nav>
 </header>
 
 <main>
 <section class="hero" id="home">
   <div class="hero-text">
-    <div class="eyebrow">THE PREMIUM COLLECTION</div>
-    <h1>Technology<br>Meets <span class="green">Elegance.</span></h1>
-    <p>Discover premium phone accessories designed for your everyday lifestyle.</p>
-    <a class="button" href="#shop">EXPLORE COLLECTION &nbsp; →</a>
+    <div class="label">PREMIUM PHONE ACCESSORIES</div>
+    <h1><span class="green">AVerio</span><br>Smart Accessories.<br><span class="green">Smart Choice.</span></h1>
+    <p>Keep your phone charged, protected and always ready with AVerio.</p>
+    <a class="btn" href="#products">SHOP NOW &nbsp; →</a>
+    <p>✓ Premium Quality &nbsp; ✓ Great Choices &nbsp; ✓ WhatsApp Orders</p>
   </div>
-  <div class="hero-art">📱</div>
+  <img class="hero-image" src="https://images.unsplash.com/photo-1605236453806-6ff36851218e?auto=format&fit=crop&w=800&q=85" alt="Premium smartphone">
 </section>
 
 <section id="categories">
-  <div class="section-label">DISCOVER YOUR STYLE</div>
-  <h2>Our <span class="green">Collections</span></h2>
+  <div class="label">DISCOVER YOUR STYLE</div>
+  <h2 class="heading">Our <span class="green">Collections</span></h2>
   <div class="categories">
-    <div class="card category"><div class="icon">🔌</div><h3>Chargers</h3></div>
-    <div class="card category"><div class="icon">🔋</div><h3>Cables</h3></div>
-    <div class="card category"><div class="icon">🎧</div><h3>Audio</h3></div>
-    <div class="card category"><div class="icon">📱</div><h3>Phone Covers</h3></div>
-    <div class="card category"><div class="icon">🛡️</div><h3>Screen Guards</h3></div>
-    <div class="card category"><div class="icon">🎮</div><h3>Accessories</h3></div>
+    <div class="card category"><img src="https://images.unsplash.com/photo-1583863788434-e58a36330cf0?auto=format&fit=crop&w=300&q=80" alt="Charger"><h3>Chargers</h3></div>
+    <div class="card category"><img src="https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?auto=format&fit=crop&w=300&q=80" alt="Accessories"><h3>Cables</h3></div>
+    <div class="card category"><img src="https://images.unsplash.com/photo-1606220945770-b5b6c2c55bf1?auto=format&fit=crop&w=300&q=80" alt="Earbuds"><h3>Audio</h3></div>
+    <div class="card category"><img src="https://images.unsplash.com/photo-1603313011101-320f26a4f6f6?auto=format&fit=crop&w=300&q=80" alt="Phone case"><h3>Phone Covers</h3></div>
+    <div class="card category"><img src="https://images.unsplash.com/photo-1585789571034-6c6a35b1a3bb?auto=format&fit=crop&w=300&q=80" alt="Phone protection"><h3>Protection</h3></div>
+    <div class="card category"><img src="https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=300&q=80" alt="Accessories"><h3>Accessories</h3></div>
   </div>
 </section>
 
-<section id="shop">
-  <div class="section-label">SELECTED FOR YOU</div>
-  <h2>Featured <span class="green">Products</span></h2>
+<section id="products">
+  <div class="label">TRENDING NOW</div>
+  <h2 class="heading">Featured <span class="green">Products</span></h2>
   <div class="products">
     <div class="card">
-      <div class="product-art">🔌</div>
-      <div class="product-name">Fast Charger</div>
-      <p>Reliable everyday charging</p>
-      <div class="price">₹499</div>
-      <a class="order" href="https://wa.me/916204277290?text=I%20want%20to%20order%20Fast%20Charger">ORDER NOW →</a>
+      <img class="product-img" src="https://images.unsplash.com/photo-1583863788434-e58a36330cf0?auto=format&fit=crop&w=500&q=85" alt="Fast charger">
+      <div class="product-info"><h3>Fast Charger</h3><p>Quick charging</p><div class="price">₹499</div><a class="order" href="https://wa.me/916204277290?text=I%20want%20to%20order%20Fast%20Charger">ORDER NOW →</a></div>
     </div>
     <div class="card">
-      <div class="product-art">🔋</div>
-      <div class="product-name">Type-C Cable</div>
-      <p>Made for daily use</p>
-      <div class="price">₹199</div>
-      <a class="order" href="https://wa.me/916204277290?text=I%20want%20to%20order%20Type-C%20Cable">ORDER NOW →</a>
+      <img class="product-img" src="https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?auto=format&fit=crop&w=500&q=85" alt="Cable">
+      <div class="product-info"><h3>Type-C Cable</h3><p>Fast & durable</p><div class="price">₹199</div><a class="order" href="https://wa.me/916204277290?text=I%20want%20to%20order%20Type-C%20Cable">ORDER NOW →</a></div>
     </div>
     <div class="card">
-      <div class="product-art">🎧</div>
-      <div class="product-name">Wireless Earbuds</div>
-      <p>Your music, your way</p>
-      <div class="price">₹899</div>
-      <a class="order" href="https://wa.me/916204277290?text=I%20want%20to%20order%20Wireless%20Earbuds">ORDER NOW →</a>
+      <img class="product-img" src="https://images.unsplash.com/photo-1606220945770-b5b6c2c55bf1?auto=format&fit=crop&w=500&q=85" alt="Earbuds">
+      <div class="product-info"><h3>Wireless Earbuds</h3><p>Enjoy your music</p><div class="price">₹899</div><a class="order" href="https://wa.me/916204277290?text=I%20want%20to%20order%20Wireless%20Earbuds">ORDER NOW →</a></div>
     </div>
     <div class="card">
-      <div class="product-art">📱</div>
-      <div class="product-name">Premium Cover</div>
-      <p>Style meets protection</p>
-      <div class="price">₹249</div>
-      <a class="order" href="https://wa.me/916204277290?text=I%20want%20to%20order%20Premium%20Cover">ORDER NOW →</a>
+      <img class="product-img" src="https://images.unsplash.com/photo-1603313011101-320f26a4f6f6?auto=format&fit=crop&w=500&q=85" alt="Phone cover">
+      <div class="product-info"><h3>Premium Cover</h3><p>Style & protection</p><div class="price">₹249</div><a class="order" href="https://wa.me/916204277290?text=I%20want%20to%20order%20Premium%20Cover">ORDER NOW →</a></div>
+    </div>
+    <div class="card">
+      <img class="product-img" src="https://images.unsplash.com/photo-1585789571034-6c6a35b1a3bb?auto=format&fit=crop&w=500&q=85" alt="Screen protector">
+      <div class="product-info"><h3>Screen Guard</h3><p>Screen protection</p><div class="price">₹149</div><a class="order" href="https://wa.me/916204277290?text=I%20want%20to%20order%20Screen%20Guard">ORDER NOW →</a></div>
     </div>
   </div>
 </section>
 
 <div class="promo">
-  <div>
-    <div class="section-label">EXCLUSIVE OFFER</div>
-    <h2>₹49 OFF</h2>
-    <p>Use code <strong>AV49</strong> on purchases of ₹251 or more.</p>
-  </div>
-  <div>
-    <h3>Ready to shop?</h3>
-    <a class="button" href="https://wa.me/916204277290?text=Hello%20AVerio%2C%20I%20want%20to%20place%20an%20order">CHAT ON WHATSAPP →</a>
-  </div>
+  <div><div class="label">SPECIAL OFFER</div><h2>GET ₹49 OFF</h2><p>Use coupon <strong>AV49</strong> on purchases of ₹251 or more.</p></div>
+  <div><h3>Order on WhatsApp</h3><p>Quick and easy ordering.</p><a class="btn" href="https://wa.me/916204277290?text=Hello%20AVerio%2C%20I%20want%20to%20place%20an%20order">CHAT NOW →</a></div>
 </div>
 </main>
 
 <footer>
   <div class="logo"><span>A</span>Verio<small>PHONE ACCESSORIES</small></div>
   <p>Smart Accessories. Smart Choice.</p>
-  <p>Thawe Junction, near the Over Bridge</p>
+  <p>📍 Thawe Junction, near the Over Bridge</p>
   <p>© 2026 AVerio Phone Accessories</p>
 </footer>
 </body>
