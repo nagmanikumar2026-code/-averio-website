@@ -1,10 +1,9 @@
+ ```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>AVerio | Phone Accessories</title>
   <meta name="description" content="Shop phone accessories at AVerio. Smart Accessories. Smart Choice.">
 
@@ -18,118 +17,13 @@
       --green: #c6ff00;
       --black: #080a08;
       --card: #141714;
-      --white: #ffffff;
+      --white: #fff;
       --muted: #b5b9b2;
     }
 
     * { box-sizing: border-box; }
 
     body {
-      <!-- AVerio Customer Login / Signup -->
-<section id="customer-account" style="max-width:400px;margin:30px auto;padding:20px;background:#111;color:white;border:1px solid #b6ff00;border-radius:12px;font-family:Arial,sans-serif;">
-  <h2 style="color:#b6ff00;">AVerio Account</h2>
-  <p>Login karo ya naya account banao.</p>
-
-Email
-Password
-Create Account
-Login
-Logout
-
-  <p id="account-message" role="status" aria-live="polite"></p>
-</section>
-<script>
-(function () {
-  const message = document.getElementById("account-message");
-  const emailInput = document.getElementById("account-email");
-  const passwordInput = document.getElementById("account-password");
-  const signupButton = document.getElementById("account-signup");
-  const loginButton = document.getElementById("account-login");
-  const logoutButton = document.getElementById("account-logout");
-  function showMessage(text) {
-    message.textContent = text;
-  }
-  function getClient() {
-    if (!window.supabase || !window.supabase.createClient) {
-      throw new Error("Supabase library load nahi hui. Internet connection check karo.");
-    }
-    if (!window.averioAuthClient) {
-      const url = window.AVERIO_SUPABASE_URL;
-      const key = window.AVERIO_SUPABASE_KEY;
-      if (!url || !key) {
-        throw new Error("Supabase URL aur publishable key configure nahi hain.");
-      }
-      window.averioAuthClient = window.supabase.createClient(url, key);
-    }
-    return window.averioAuthClient;
-  }
-  async function updateAccountState() {
-    try {
-      const client = getClient();
-      const { data } = await client.auth.getUser();
-      if (data.user) {
-        showMessage("Logged in: " + data.user.email);
-        logoutButton.style.display = "inline-block";
-      } else {
-        logoutButton.style.display = "none";
-      }
-    } catch (error) {
-      showMessage(error.message);
-    }
-  }
-  signupButton.addEventListener("click", async function () {
-    const email = emailInput.value.trim();
-    const password = passwordInput.value;
-    if (!email || password.length < 6) {
-      showMessage("Email likho aur kam se kam 6 characters ka password rakho.");
-      return;
-    }
-    try {
-      showMessage("Account ban raha hai...");
-      const client = getClient();
-      const { data, error } = await client.auth.signUp({ email, password });
-      if (error) throw error;
-      if (data.session) {
-        showMessage("Account ban gaya aur login ho gaya!");
-      } else {
-        showMessage("Account request ho gayi. Email inbox check karo aur confirmation link par click karo, agar maanga jaye.");
-      }
-      await updateAccountState();
-    } catch (error) {
-      showMessage("Signup error: " + error.message);
-    }
-  });
-  loginButton.addEventListener("click", async function () {
-    const email = emailInput.value.trim();
-    const password = passwordInput.value;
-    if (!email || !password) {
-      showMessage("Email aur password dono likho.");
-      return;
-    }
-    try {
-      showMessage("Login ho raha hai...");
-      const client = getClient();
-      const { data, error } = await client.auth.signInWithPassword({ email, password });
-      if (error) throw error;
-      showMessage("Login successful! " + data.user.email);
-      logoutButton.style.display = "inline-block";
-    } catch (error) {
-      showMessage("Login error: " + error.message);
-    }
-  });
-  logoutButton.addEventListener("click", async function () {
-    try {
-      const { error } = await getClient().auth.signOut();
-      if (error) throw error;
-      showMessage("Logout ho gaya.");
-      logoutButton.style.display = "none";
-    } catch (error) {
-      showMessage("Logout error: " + error.message);
-    }
-  });
-  updateAccountState();
-})();
-</script>
       margin: 0;
       background: var(--black);
       color: var(--white);
@@ -141,6 +35,7 @@ Logout
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 12px;
       border-bottom: 1px solid #252a22;
       position: sticky;
       top: 0;
@@ -155,16 +50,18 @@ Logout
       font-weight: 700;
     }
 
-    .cart-button, .btn {
+    .btn, .cart-button {
       border: 0;
       background: var(--green);
-      color: #080a08;
+      color: var(--black);
       font-weight: 700;
       padding: 12px 17px;
       border-radius: 8px;
       cursor: pointer;
       font-family: inherit;
     }
+
+    button:disabled { opacity: .6; cursor: wait; }
 
     .hero {
       text-align: center;
@@ -179,8 +76,7 @@ Logout
     }
 
     .hero h1 span { color: var(--green); }
-
-    .hero p { color: var(--muted); }
+    .hero p, .notice { color: var(--muted); }
 
     .section {
       padding: 35px 6%;
@@ -211,10 +107,9 @@ Logout
     }
 
     .product-info { padding: 15px; }
-
     .product h3 { margin: 0 0 8px; }
 
-    .price {
+    .price, .total {
       color: var(--green);
       font-size: 20px;
       font-weight: 700;
@@ -223,12 +118,18 @@ Logout
 
     .product .btn { width: 100%; }
 
-    .panel {
+    .panel, .account-panel {
       background: var(--card);
       padding: 22px;
       border: 1px solid #30362a;
       border-radius: 12px;
-      margin-top: 25px;
+      margin-top: 20px;
+    }
+
+    .account-panel {
+      max-width: 500px;
+      margin: 20px auto;
+      border-color: var(--green);
     }
 
     .cart-row {
@@ -258,20 +159,12 @@ Logout
 
     label { font-size: 14px; }
 
-    .total {
-      font-size: 21px;
-      font-weight: 700;
-      color: var(--green);
-      margin: 18px 0;
-    }
-
     .notice {
-      color: var(--muted);
       font-size: 13px;
       line-height: 1.6;
     }
 
-    #message {
+    #message, #account-message {
       padding: 12px 0;
       line-height: 1.6;
       overflow-wrap: anywhere;
@@ -284,22 +177,20 @@ Logout
       color: var(--muted);
     }
 
-    .hidden { display: none; }
-
     @media (max-width: 480px) {
       header { padding: 14px 4%; }
       .logo { font-size: 21px; }
       .cart-button { padding: 10px; }
       .section { padding: 25px 4%; }
+      .account-panel, .panel { padding: 16px; }
     }
   </style>
 </head>
 
 <body>
-
 <header>
   <div class="logo">AVerio</div>
-  <button class="cart-button" onclick="showCart()">
+  <button class="cart-button" type="button" onclick="showCart()">
     🛒 Cart (<span id="cartCount">0</span>)
   </button>
 </header>
@@ -307,9 +198,33 @@ Logout
 <section class="hero">
   <h1>Smart Accessories.<br><span>Smart Choice.</span></h1>
   <p>Premium Phone Accessories at the Right Price.</p>
-  <button class="btn" onclick="document.getElementById('shop').scrollIntoView({behavior:'smooth'})">
+  <button class="btn" type="button"
+    onclick="document.getElementById('shop').scrollIntoView({behavior:'smooth'})">
     SHOP NOW
   </button>
+</section>
+
+<!-- CUSTOMER ACCOUNT -->
+<section class="section" id="customer-account">
+  <div class="account-panel">
+    <h2>AVerio Account</h2>
+    <p>Create your account or login with email.</p>
+
+    <label for="account-email">Email</label>
+    <input id="account-email" type="email" autocomplete="email"
+      placeholder="Enter your email">
+
+    <label for="account-password">Password</label>
+    <input id="account-password" type="password"
+      autocomplete="current-password"
+      minlength="6" placeholder="At least 6 characters">
+
+    <button class="btn" id="account-signup" type="button">Create Account</button>
+    <button class="btn" id="account-login" type="button">Login</button>
+    <button class="btn" id="account-logout" type="button" hidden>Logout</button>
+
+    <p id="account-message" role="status" aria-live="polite"></p>
+  </div>
 </section>
 
 <section class="section" id="shop">
@@ -319,27 +234,25 @@ Logout
 
 <section class="section" id="cartSection">
   <h2>Your Shopping Cart</h2>
-
   <div class="panel">
     <div id="cartItems">Your cart is empty.</div>
     <div class="total">Total: ₹<span id="total">0</span></div>
 
     <h2>Delivery Details</h2>
-
     <form id="orderForm">
       <label for="customerName">Full Name *</label>
-      <input id="customerName" required maxlength="100" autocomplete="name"
-             placeholder="Enter your name">
+      <input id="customerName" required maxlength="100"
+        autocomplete="name" placeholder="Enter your name">
 
       <label for="customerPhone">Mobile Number *</label>
       <input id="customerPhone" required type="tel" inputmode="numeric"
-             pattern="[6-9][0-9]{9}" maxlength="10"
-             autocomplete="tel" placeholder="10-digit mobile number">
+        pattern="[6-9][0-9]{9}" maxlength="10" autocomplete="tel"
+        placeholder="10-digit mobile number">
 
       <label for="customerAddress">Full Delivery Address *</label>
       <textarea id="customerAddress" required maxlength="500"
-                autocomplete="street-address"
-                placeholder="House, street, town, PIN code"></textarea>
+        autocomplete="street-address"
+        placeholder="House, street, town, PIN code"></textarea>
 
       <label for="payment">Payment Method</label>
       <select id="payment">
@@ -352,11 +265,10 @@ Logout
     </form>
 
     <p class="notice">
-      Your order will be submitted to AVerio. After a successful submission,
-      WhatsApp will open so you can send the order details to the shop.
+      After the order is saved, WhatsApp will open with your order details.
+      Press Send in WhatsApp to contact the shop.
     </p>
-
-    <div id="message" role="status"></div>
+    <div id="message" role="status" aria-live="polite"></div>
   </div>
 </section>
 
@@ -368,22 +280,22 @@ Logout
 </footer>
 
 <script>
-  // Replace these two placeholders with your Supabase project details.
-  const SUPABASE_URL = "https://osygbpfgxpxrzkfcbwgo.supabase.co/rest/v1/";
-  const SUPABASE_KEY = "sb_publishable_4nitgew7mAjfWu8cPpY0bA_Cbik013P";
-
-  // AVerio shop WhatsApp number, with country code 91.
+  // Use your actual Supabase Project URL and publishable key.
+  // Do not use a secret or service_role key in website code.
+  const SUPABASE_URL = "https://osygbpfgxpxrzkfcbwgo.supabase.co";
+  const SUPABASE_KEY = "PASTE_YOUR_EXISTING_PUBLISHABLE_KEY_HERE";
   const SHOP_WHATSAPP = "916204277290";
 
-  const configReady =
-    SUPABASE_URL.startsWith("https://") &&
-    !SUPABASE_URL.includes("YOUR_") &&
-    SUPABASE_KEY.length > 20 &&
-    !SUPABASE_KEY.includes("YOUR_");
+  let db = null;
 
-  const db = configReady
-    ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
-    : null;
+  try {
+    if (window.supabase && SUPABASE_KEY !==
+        "PASTE_YOUR_EXISTING_PUBLISHABLE_KEY_HERE") {
+      db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    }
+  } catch (error) {
+    console.error("Supabase initialization error:", error);
+  }
 
   const products = [
     {
@@ -427,7 +339,7 @@ Logout
         <div class="product-info">
           <h3>${p.name}</h3>
           <div class="price">₹${p.price}</div>
-          <button class="btn" onclick="addToCart('${p.id}')">
+          <button class="btn" type="button" onclick="addToCart('${p.id}')">
             ADD TO CART
           </button>
         </div>
@@ -447,15 +359,13 @@ Logout
   }
 
   function getItems() {
-    return products
-      .filter(p => cart[p.id])
-      .map(p => ({
-        product_id: p.id,
-        name: p.name,
-        price: p.price,
-        quantity: cart[p.id],
-        subtotal: p.price * cart[p.id]
-      }));
+    return products.filter(p => cart[p.id]).map(p => ({
+      product_id: p.id,
+      name: p.name,
+      price: p.price,
+      quantity: cart[p.id],
+      subtotal: p.price * cart[p.id]
+    }));
   }
 
   function getTotal() {
@@ -491,7 +401,112 @@ Logout
     document.getElementById("cartSection").scrollIntoView({behavior: "smooth"});
   }
 
-  document.getElementById("orderForm").addEventListener("submit", async function(event) {
+  // CUSTOMER SIGNUP / LOGIN
+  const accountEmail = document.getElementById("account-email");
+  const accountPassword = document.getElementById("account-password");
+  const accountMessage = document.getElementById("account-message");
+  const signupButton = document.getElementById("account-signup");
+  const loginButton = document.getElementById("account-login");
+  const logoutButton = document.getElementById("account-logout");
+
+  function showAccountMessage(text) {
+    accountMessage.textContent = text;
+  }
+
+  function requireSupabase() {
+    if (!db) {
+      throw new Error("Supabase setup incomplete. Check the Project URL and publishable key.");
+    }
+    return db;
+  }
+
+  async function refreshAccount() {
+    if (!db) return;
+
+    try {
+      const { data, error } = await db.auth.getUser();
+      if (error) throw error;
+
+      if (data.user) {
+        showAccountMessage("Logged in: " + data.user.email);
+        logoutButton.hidden = false;
+        signupButton.hidden = true;
+        loginButton.hidden = true;
+      } else {
+        logoutButton.hidden = true;
+        signupButton.hidden = false;
+        loginButton.hidden = false;
+      }
+    } catch (error) {
+      showAccountMessage(error.message);
+    }
+  }
+
+  signupButton.addEventListener("click", async () => {
+    const email = accountEmail.value.trim();
+    const password = accountPassword.value;
+
+    if (!email || password.length < 6) {
+      showAccountMessage("Enter a valid email and a password of at least 6 characters.");
+      return;
+    }
+
+    try {
+      showAccountMessage("Creating account...");
+      const client = requireSupabase();
+      const { data, error } = await client.auth.signUp({ email, password });
+      if (error) throw error;
+
+      if (data.session) {
+        showAccountMessage("Account created and logged in!");
+      } else {
+        showAccountMessage("Signup submitted. Check your email for a confirmation link if required.");
+      }
+      await refreshAccount();
+    } catch (error) {
+      showAccountMessage("Signup error: " + error.message);
+    }
+  });
+
+  loginButton.addEventListener("click", async () => {
+    const email = accountEmail.value.trim();
+    const password = accountPassword.value;
+
+    if (!email || !password) {
+      showAccountMessage("Enter your email and password.");
+      return;
+    }
+
+    try {
+      showAccountMessage("Logging in...");
+      const client = requireSupabase();
+      const { data, error } = await client.auth.signInWithPassword({
+        email,
+        password
+      });
+      if (error) throw error;
+
+      showAccountMessage("Login successful: " + data.user.email);
+      await refreshAccount();
+    } catch (error) {
+      showAccountMessage("Login error: " + error.message);
+    }
+  });
+
+  logoutButton.addEventListener("click", async () => {
+    try {
+      const { error } = await requireSupabase().auth.signOut();
+      if (error) throw error;
+
+      showAccountMessage("Logged out.");
+      await refreshAccount();
+    } catch (error) {
+      showAccountMessage("Logout error: " + error.message);
+    }
+  });
+
+  // CHECKOUT
+  document.getElementById("orderForm").addEventListener("submit", async event => {
     event.preventDefault();
 
     const message = document.getElementById("message");
@@ -507,8 +522,7 @@ Logout
     }
 
     if (!db) {
-      message.textContent =
-        "Setup is not complete. Please add your Supabase Project URL and Publishable Key in the code.";
+      message.textContent = "Supabase setup incomplete. Check the Project URL and publishable key.";
       return;
     }
 
@@ -526,25 +540,18 @@ Logout
     button.textContent = "SUBMITTING ORDER...";
 
     try {
-      const { data, error } = await db
-        .from("orders")
-        .insert([{
-          customer_name: name,
-          customer_phone: phone,
-          customer_address: address,
-          total_amount: total,
-          status: "New",
-          payment_method: payment,
-          items: items
-        }])
-        .select("id")
-        .single();
-
-      
-            ;
+      const { error } = await db.from("orders").insert([{
+        customer_name: name,
+        customer_phone: phone,
+        customer_address: address,
+        total_amount: total,
+        status: "New",
+        payment_method: payment,
+        items: items
+      }]);
 
       if (error) throw error;
-console.log("Supabase order error:", error);
+
       const orderId = "AV-" + Date.now().toString().slice(-8);
 
       const orderText = [
@@ -563,24 +570,20 @@ console.log("Supabase order error:", error);
       ].join("\n");
 
       message.textContent =
-        "Order submitted successfully! Order ID: " + orderId +
-        ". WhatsApp will open next. Please press Send in WhatsApp.";
+        "Order saved! Order ID: " + orderId +
+        ". WhatsApp will open; press Send to contact the shop.";
 
       for (const key of Object.keys(cart)) delete cart[key];
       renderCart();
-
       document.getElementById("orderForm").reset();
 
-      const whatsappUrl =
+      window.location.href =
         "https://wa.me/" + SHOP_WHATSAPP + "?text=" +
         encodeURIComponent(orderText);
 
-      window.location.href = whatsappUrl;
-
     } catch (error) {
       console.error("Order submission failed:", error);
-      message.textContent =
-        "Order could not be saved. Please check your internet connection and Supabase permissions, then try again.";
+      message.textContent = "Order could not be saved: " + error.message;
     } finally {
       button.disabled = false;
       button.textContent = "PLACE ORDER";
@@ -589,7 +592,8 @@ console.log("Supabase order error:", error);
 
   renderProducts();
   renderCart();
+  refreshAccount();
 </script>
-
 </body>
 </html>
+```
