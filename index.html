@@ -434,10 +434,11 @@
         .select("id")
         .single();
 
+      
             ;
 
       if (error) throw error;
-
+console.log("Supabase order error:", error);
       const orderId = "AV-" + Date.now().toString().slice(-8);
 
       const orderText = [
