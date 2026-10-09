@@ -434,9 +434,11 @@
         .select("id")
         .single();
 
+            ;
+
       if (error) throw error;
 
-      const orderId = data.id;
+      const orderId = "AV-" + Date.now().toString().slice(-8);
 
       const orderText = [
         "AVerio Website Order",
