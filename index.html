@@ -25,6 +25,111 @@
     * { box-sizing: border-box; }
 
     body {
+      <!-- AVerio Customer Login / Signup -->
+<section id="customer-account" style="max-width:400px;margin:30px auto;padding:20px;background:#111;color:white;border:1px solid #b6ff00;border-radius:12px;font-family:Arial,sans-serif;">
+  <h2 style="color:#b6ff00;">AVerio Account</h2>
+  <p>Login karo ya naya account banao.</p>
+
+Email
+Password
+Create Account
+Login
+Logout
+
+  <p id="account-message" role="status" aria-live="polite"></p>
+</section>
+<script>
+(function () {
+  const message = document.getElementById("account-message");
+  const emailInput = document.getElementById("account-email");
+  const passwordInput = document.getElementById("account-password");
+  const signupButton = document.getElementById("account-signup");
+  const loginButton = document.getElementById("account-login");
+  const logoutButton = document.getElementById("account-logout");
+  function showMessage(text) {
+    message.textContent = text;
+  }
+  function getClient() {
+    if (!window.supabase || !window.supabase.createClient) {
+      throw new Error("Supabase library load nahi hui. Internet connection check karo.");
+    }
+    if (!window.averioAuthClient) {
+      const url = window.AVERIO_SUPABASE_URL;
+      const key = window.AVERIO_SUPABASE_KEY;
+      if (!url || !key) {
+        throw new Error("Supabase URL aur publishable key configure nahi hain.");
+      }
+      window.averioAuthClient = window.supabase.createClient(url, key);
+    }
+    return window.averioAuthClient;
+  }
+  async function updateAccountState() {
+    try {
+      const client = getClient();
+      const { data } = await client.auth.getUser();
+      if (data.user) {
+        showMessage("Logged in: " + data.user.email);
+        logoutButton.style.display = "inline-block";
+      } else {
+        logoutButton.style.display = "none";
+      }
+    } catch (error) {
+      showMessage(error.message);
+    }
+  }
+  signupButton.addEventListener("click", async function () {
+    const email = emailInput.value.trim();
+    const password = passwordInput.value;
+    if (!email || password.length < 6) {
+      showMessage("Email likho aur kam se kam 6 characters ka password rakho.");
+      return;
+    }
+    try {
+      showMessage("Account ban raha hai...");
+      const client = getClient();
+      const { data, error } = await client.auth.signUp({ email, password });
+      if (error) throw error;
+      if (data.session) {
+        showMessage("Account ban gaya aur login ho gaya!");
+      } else {
+        showMessage("Account request ho gayi. Email inbox check karo aur confirmation link par click karo, agar maanga jaye.");
+      }
+      await updateAccountState();
+    } catch (error) {
+      showMessage("Signup error: " + error.message);
+    }
+  });
+  loginButton.addEventListener("click", async function () {
+    const email = emailInput.value.trim();
+    const password = passwordInput.value;
+    if (!email || !password) {
+      showMessage("Email aur password dono likho.");
+      return;
+    }
+    try {
+      showMessage("Login ho raha hai...");
+      const client = getClient();
+      const { data, error } = await client.auth.signInWithPassword({ email, password });
+      if (error) throw error;
+      showMessage("Login successful! " + data.user.email);
+      logoutButton.style.display = "inline-block";
+    } catch (error) {
+      showMessage("Login error: " + error.message);
+    }
+  });
+  logoutButton.addEventListener("click", async function () {
+    try {
+      const { error } = await getClient().auth.signOut();
+      if (error) throw error;
+      showMessage("Logout ho gaya.");
+      logoutButton.style.display = "none";
+    } catch (error) {
+      showMessage("Logout error: " + error.message);
+    }
+  });
+  updateAccountState();
+})();
+</script>
       margin: 0;
       background: var(--black);
       color: var(--white);
