@@ -601,34 +601,47 @@
       }
     }
 
-    signupButton.addEventListener("click", async () => {
-      const email = accountEmail.value.trim();
-      const password = accountPassword.value;
+    ```javascript
+signupButton.addEventListener("click", async () => {
+  const email = accountEmail.value.trim();
+  const password = accountPassword.value;
 
-      if (!email || !accountEmail.validity.valid || password.length < 6) {
-        showAccountMessage("Enter a valid email and a password of at least 6 characters.");
-        return;
-      }
+  if (!email || !accountEmail.validity.valid || password.length < 6) {
+    showAccountMessage(
+      "Enter a valid email and a password of at least 6 characters."
+    );
+    return;
+  }
 
-      try {
-        showAccountMessage("Creating account...");
-        const { data, error } = await requireSupabase().auth.signUp({
-          email,
-          password
-        });
-        if (error) throw error;
+  try {
+    showAccountMessage("Creating account...");
 
-        if (data.session) {
-          showAccountMessage("Account created and logged in!");
-        } else {
-          showAccountMessage("Signup submitted. Check your email for a confirmation link if required.");
-        }
-        await refreshAccount();
-      } catch (error) {
-        showAccountMessage("Signup error: " + error.message);
+    const { data, error } = await requireSupabase().auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: window.location.origin + "/"
       }
     });
 
+    if (error) throw error;
+
+    if (data.session) {
+      showAccountMessage("Account created and logged in!");
+    } else if (data.user) {
+      showAccountMessage(
+        "Account created! Confirm your email, then return here and LOGIN."
+      );
+    } else {
+      showAccountMessage(
+        "Signup submitted. Check your email for confirmation."
+      );
+    }
+  } catch (error) {
+    showAccountMessage("Signup error: " + error.message);
+  }
+});
+```
     loginButton.addEventListener("click", async () => {
       const email = accountEmail.value.trim();
       const password = accountPassword.value;
