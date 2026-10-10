@@ -343,7 +343,11 @@
                  autocomplete="current-password" minlength="6"
                  placeholder="At least 6 characters">
 
+          <label for="account-otp" id="account-otp-label" hidden>Email OTP code</label>
+          <input id="account-otp" type="text" inputmode="numeric" autocomplete="one-time-code"
+                 maxlength="8" placeholder="Enter email OTP" hidden>
           <div class="form-actions">
+            <button class="btn" id="account-verify-otp" type="button" hidden>VERIFY OTP</button>
             <button class="btn" id="account-signup" type="button">SIGN UP</button>
             <button class="btn btn-secondary" id="account-login" type="button">LOGIN</button>
             <button class="btn btn-secondary" id="account-logout" type="button" hidden>LOG OUT</button>
@@ -575,6 +579,15 @@
     const signupButton = document.getElementById("account-signup");
     const loginButton = document.getElementById("account-login");
     const logoutButton = document.getElementById("account-logout");
+    const otpInput = document.getElementById("account-otp");
+    const otpLabel = document.getElementById("account-otp-label");
+    const verifyOtpButton = document.getElementById("account-verify-otp");
+
+    function showOtpInput(show) {
+      otpInput.hidden = !show;
+      otpLabel.hidden = !show;
+      verifyOtpButton.hidden = !show;
+    }
 
     function showAccountMessage(text) {
       accountMessage.textContent = text;
@@ -582,9 +595,10 @@
 
     function requireSupabase() {
       if (!db) {
-        throw new Error(
-          "Supabase setup incomplete. Check the Project URL, publishable key and library."
-        );
+        if (supabaseLibraryError) {
+          throw new Error("Supabase library load nahi hui: " + (supabaseLibraryError.message || String(supabaseLibraryError)) + ". Netlify par latest index.html publish karein aur internet/CDN connection check karein.");
+        }
+        throw new Error("Supabase client initialize nahi hua. F12 > Console mein 'Supabase initialization error' dekhein. Ho sakta hai Netlify par purana index.html chal raha ho.");
       }
       return db;
     }
@@ -673,13 +687,40 @@
         if (error) throw error;
 
         if (data.session) {
+          showOtpInput(false);
           showAccountMessage("Account created and logged in!");
+          await refreshAccount();
         } else {
-          showAccountMessage("Signup submitted. Check your email for a confirmation link if required.");
+          showOtpInput(true);
+          showAccountMessage("Email par OTP bheja gaya hai. Inbox/Spam check karke code yahan enter karein.");
+          otpInput.focus();
         }
-        await refreshAccount();
       } catch (error) {
         showAccountMessage("Signup error: " + error.message);
+      }
+    });
+
+    verifyOtpButton.addEventListener("click", async () => {
+      const email = accountEmail.value.trim();
+      const token = otpInput.value.trim();
+      if (!email || !accountEmail.validity.valid || !token) {
+        showAccountMessage("Apna valid email aur email par aaya OTP enter karein.");
+        return;
+      }
+      try {
+        showAccountMessage("OTP verify ho raha hai...");
+        const { data, error } = await requireSupabase().auth.verifyOtp({
+          email,
+          token,
+          type: "signup"
+        });
+        if (error) throw error;
+        showOtpInput(false);
+        otpInput.value = "";
+        showAccountMessage("Email verify ho gaya! Aap login ho gaye hain.");
+        await refreshAccount();
+      } catch (error) {
+        showAccountMessage("OTP verify nahi hua: " + error.message);
       }
     });
 
