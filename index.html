@@ -1,34 +1,818 @@
-AVerio
-Account
-WELCOME TO AVERIO
-Upgrade Your
-Phone Experience.
-Smart Accessories. Smart Choice. Discover everyday accessories for your phone.
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AVerio | Phone Accessories</title>
+  <meta name="description" content="Shop phone accessories at AVerio. Smart Accessories. Smart Choice.">
 
-LOGIN TO SHOP
-CUSTOMER AREA
-AVerio Account
-Create an account or log in to your account.
+  <!-- Supabase library: load once before our app code -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-Sign Up / Login
-Email address
-you@example.com
-Password
-At least 6 characters
-SIGN UP
-LOGIN
-Please log in or create an account to see products.
-Shop with confidence
-Need help with an order? Contact AVerio on WhatsApp.
+  <style>
+    :root {
+      --black: #090b0a;
+      --panel: #141815;
+      --green: #c7ff36;
+      --white: #f5f7f2;
+      --muted: #a8b0a5;
+      --border: #30382e;
+    }
 
-WhatsApp: 6204277290
+    * { box-sizing: border-box; }
 
-Location:
-Thawe Junction, near the Over Bridge
+    body {
+      margin: 0;
+      background: var(--black);
+      color: var(--white);
+      font-family: Arial, sans-serif;
+      line-height: 1.5;
+    }
 
-CONTACT US
-AVerio
-Smart Accessories. Smart Choice.
-Thawe Junction, near the Over Bridge
-© 2026 AVerio
+    button, input, textarea, select { font: inherit; }
+
+    button {
+      cursor: pointer;
+    }
+
+    a { color: inherit; }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      background: rgba(9, 11, 10, 0.96);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .logo {
+      color: var(--green);
+      font-family: Georgia, serif;
+      font-weight: bold;
+      font-size: 27px;
+      letter-spacing: 3px;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .cart-link {
+      border: 1px solid var(--green);
+      color: var(--green);
+      padding: 7px 12px;
+      border-radius: 7px;
+    }
+
+    .hero {
+      min-height: 340px;
+      padding: 70px 6%;
+      display: flex;
+      align-items: center;
+      background:
+        radial-gradient(ellipse at 80% 20%, #31451b 0, transparent 38%),
+        linear-gradient(135deg, #101510, #090b0a 65%);
+    }
+
+    .hero-content { max-width: 680px; }
+
+    .eyebrow {
+      color: var(--green);
+      font-size: 12px;
+      font-weight: bold;
+      letter-spacing: 3px;
+    }
+
+    h1 {
+      margin: 12px 0;
+      font-family: Georgia, serif;
+      font-size: clamp(38px, 7vw, 68px);
+      line-height: 1.08;
+    }
+
+    .accent { color: var(--green); }
+
+    .hero p {
+      color: var(--muted);
+      max-width: 470px;
+    }
+
+    .btn {
+      background: var(--green);
+      color: #10140a;
+      border: 0;
+      border-radius: 7px;
+      padding: 12px 17px;
+      font-weight: bold;
+    }
+
+    .btn:hover { filter: brightness(0.92); }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--green);
+      border: 1px solid var(--green);
+    }
+
+    main {
+      width: min(1120px, 92%);
+      margin: auto;
+    }
+
+    section { padding: 35px 0; }
+
+    .section-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 27px;
+    }
+
+    .muted { color: var(--muted); }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(205px, 1fr));
+      gap: 18px;
+    }
+
+    .product {
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--panel);
+    }
+
+    .product img {
+      display: block;
+      width: 100%;
+      height: 205px;
+      object-fit: cover;
+      background: #20251f;
+    }
+
+    .product-info { padding: 15px; }
+
+    .product h3 {
+      margin: 0 0 8px;
+      font-size: 17px;
+    }
+
+    .price {
+      color: var(--green);
+      font-size: 21px;
+      font-weight: bold;
+      margin-bottom: 14px;
+    }
+
+    .product .btn { width: 100%; }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .account-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 18px;
+    }
+
+    label {
+      display: block;
+      margin: 12px 0 5px;
+      font-size: 14px;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      background: #090d0a;
+      color: var(--white);
+      border: 1px solid #3a4437;
+      border-radius: 7px;
+      padding: 11px;
+      outline: none;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--green);
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 9px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+
+    .message {
+      min-height: 24px;
+      margin-top: 12px;
+      overflow-wrap: anywhere;
+      color: var(--green);
+      font-size: 14px;
+    }
+
+    .cart-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border-bottom: 1px solid var(--border);
+      padding: 13px 0;
+    }
+
+    .quantity {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .quantity button {
+      width: 31px;
+      height: 31px;
+      background: #252c22;
+      border: 1px solid var(--border);
+      color: var(--green);
+      border-radius: 6px;
+    }
+
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 21px;
+      font-weight: bold;
+      margin: 18px 0;
+    }
+
+    .checkout-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    footer {
+      margin-top: 30px;
+      border-top: 1px solid var(--border);
+      padding: 30px 5%;
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    footer strong { color: var(--green); }
+
+    @media (max-width: 560px) {
+      header { align-items: flex-start; }
+      .logo { font-size: 23px; }
+      nav { gap: 10px; }
+      nav a { font-size: 12px; }
+      .hero { padding: 52px 5%; }
+      .section-heading { align-items: flex-start; flex-direction: column; }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <a class="logo" href="#" style="text-decoration:none">AVerio</a>
+    <nav>
+      <a href="#products" id="productsNav" hidden>Products</a>
+      <a href="#account">Account</a>
+      <a class="cart-link" id="cartNav" href="#cartSection" hidden>
+        Cart (<span id="cartCount">0</span>)
+      </a>
+    </nav>
+  </header>
+
+  <div class="hero">
+    <div class="hero-content">
+      <div class="eyebrow">WELCOME TO AVERIO</div>
+      <h1>Upgrade Your<br><span class="accent">Phone Experience.</span></h1>
+      <p>Smart Accessories. Smart Choice. Discover everyday accessories for your phone.</p>
+      <a href="#account" id="shopNowLink"><button class="btn" type="button">LOGIN TO SHOP</button></a>
+    </div>
+  </div>
+
+  <main>
+    <section id="products" hidden>
+      <div class="section-heading">
+        <div>
+          <div class="eyebrow">OUR COLLECTION</div>
+          <h2>Featured Products</h2>
+        </div>
+        <span class="muted">Prices in Indian Rupees</span>
+      </div>
+      <div class="products" id="productList"></div>
+    </section>
+
+    <section id="account">
+      <div class="eyebrow">CUSTOMER AREA</div>
+      <h2>AVerio Account</h2>
+      <p class="muted">Create an account or log in to your account.</p>
+
+      <div class="account-grid">
+        <div class="panel">
+          <h3>Sign Up / Login</h3>
+
+          <label for="account-email">Email address</label>
+          <input id="account-email" type="email" autocomplete="email"
+                 placeholder="you@example.com">
+
+          <label for="account-password">Password</label>
+          <input id="account-password" type="password"
+                 autocomplete="current-password" minlength="6"
+                 placeholder="At least 6 characters">
+
+          <div class="form-actions">
+            <button class="btn" id="account-signup" type="button">SIGN UP</button>
+            <button class="btn btn-secondary" id="account-login" type="button">LOGIN</button>
+            <button class="btn btn-secondary" id="account-logout" type="button" hidden>LOG OUT</button>
+          </div>
+
+          <div class="message" id="account-message" role="status" aria-live="polite"></div>
+        </div>
+
+        <div class="panel">
+          <h3>Shop with confidence</h3>
+          <p class="muted">Need help with an order? Contact AVerio on WhatsApp.</p>
+          <p><strong class="accent">WhatsApp:</strong> 6204277290</p>
+          <p><strong class="accent">Location:</strong><br>Thawe Junction, near the Over Bridge</p>
+          <a href="https://wa.me/916204277290" target="_blank" rel="noopener">
+            <button class="btn btn-secondary" type="button">CONTACT US</button>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section id="cartSection" hidden>
+      <div class="eyebrow">YOUR SELECTION</div>
+      <h2>Your Shopping Cart</h2>
+      <div class="panel">
+        <div id="cartItems" class="muted">Your cart is empty.</div>
+        <div class="total-row">
+          <span>Total</span>
+          <span>₹<span id="total">0</span></span>
+        </div>
+      </div>
+    </section>
+
+    <section id="checkout" hidden>
+      <div class="eyebrow">ALMOST YOURS</div>
+      <h2>Delivery Details</h2>
+      <p class="muted">Check your details carefully before placing an order.</p>
+
+      <form id="orderForm" class="panel">
+        <div class="checkout-grid">
+          <div>
+            <label for="customerName">Full name</label>
+            <input id="customerName" name="customerName" required maxlength="100"
+                   autocomplete="name" placeholder="Your full name">
+          </div>
+          <div>
+            <label for="customerPhone">Mobile number</label>
+            <input id="customerPhone" name="customerPhone" required
+                   inputmode="numeric" autocomplete="tel" maxlength="10"
+                   pattern="[6-9][0-9]{9}" placeholder="10-digit mobile number">
+          </div>
+        </div>
+
+        <label for="customerAddress">Full delivery address</label>
+        <textarea id="customerAddress" name="customerAddress" required
+                  maxlength="1000" rows="3"
+                  autocomplete="street-address"
+                  placeholder="House, street, town/city, state and PIN code"></textarea>
+
+        <label for="payment">Payment method</label>
+        <select id="payment" name="payment" required>
+          <option value="COD">Cash on Delivery (COD)</option>
+        </select>
+
+        <p class="muted">Online payment is not enabled yet. Do not pay anyone online for this order.</p>
+
+        <button class="btn" id="placeOrder" type="submit">PLACE ORDER</button>
+        <div class="message" id="order-message" role="status" aria-live="polite"></div>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <strong>AVerio</strong><br>
+    Smart Accessories. Smart Choice.<br>
+    Thawe Junction, near the Over Bridge<br>
+    © <span id="year"></span> AVerio
+  </footer>
+
+  <script>
+    // 1. Supabase project configuration
+    const SUPABASE_URL = "https://osygbpfgxpxrzkfcbwgo.supabase.co";
+
+    // Replace this placeholder with your real Supabase Publishable key.
+    const SUPABASE_KEY = "sb_publishable_4nitgew7mAjfWu8cPpY0bA_Cbik013P";
+
+    const SHOP_WHATSAPP = "916204277290";
+    let db = null;
+
+    try {
+      if (
+        window.supabase &&
+        SUPABASE_KEY.startsWith("sb_publishable_") &&
+        SUPABASE_KEY !== "PASTE_YOUR_PUBLISHABLE_KEY_HERE"
+      ) {
+        db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+      } else {
+        console.error("Supabase library or publishable key is missing.");
+      }
+    } catch (error) {
+      console.error("Supabase initialization error:", error);
+    }
+
+    // 2. Products
+    const products = [
+      {
+        id: "charger",
+        name: "Fast Charger",
+        price: 499,
+        image: "https://images.unsplash.com/photo-1583863788434-e58a36330cf0?auto=format&fit=crop&w=700&q=80"
+      },
+      {
+        id: "cable",
+        name: "Type-C Cable",
+        price: 199,
+        image: "https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?auto=format&fit=crop&w=700&q=80"
+      },
+      {
+        id: "earbuds",
+        name: "Wireless Earbuds",
+        price: 899,
+        image: "https://images.unsplash.com/photo-1606220945770-b5b6c2c55bf1?auto=format&fit=crop&w=700&q=80"
+      },
+      {
+        id: "cover",
+        name: "Premium Phone Cover",
+        price: 249,
+        image: "https://images.unsplash.com/photo-1601593346740-925612772716?auto=format&fit=crop&w=700&q=80"
+      },
+      {
+        id: "guard",
+        name: "Screen Guard",
+        price: 149,
+        image: "https://images.unsplash.com/photo-1512499617640-c74ae3a79d37?auto=format&fit=crop&w=700&q=80"
+      }
+    ];
+
+    const cart = {};
+
+    // 3. Render products
+    function renderProducts() {
+      document.getElementById("productList").innerHTML = products.map(p => `
+        <article class="product">
+          <img src="${p.image}" alt="${p.name}" loading="lazy">
+          <div class="product-info">
+            <h3>${p.name}</h3>
+            <div class="price">₹${p.price}</div>
+            <button class="btn" type="button" onclick="addToCart('${p.id}')">
+              ADD TO CART
+            </button>
+          </div>
+        </article>
+      `).join("");
+    }
+
+    // 4. Cart functions
+    function addToCart(id) {
+      if (!db) {
+        showAccountMessage("Please log in first.");
+        document.getElementById("account").scrollIntoView({ behavior: "smooth" });
+        return;
+      }
+      // The products area is shown only when a Supabase session exists.
+      cart[id] = (cart[id] || 0) + 1;
+      renderCart();
+    }
+
+    function changeQty(id, amount) {
+      cart[id] = (cart[id] || 0) + amount;
+      if (cart[id] <= 0) delete cart[id];
+      renderCart();
+    }
+
+    function getItems() {
+      return products.filter(p => cart[p.id]).map(p => ({
+        product_id: p.id,
+        name: p.name,
+        price: p.price,
+        quantity: cart[p.id],
+        subtotal: p.price * cart[p.id]
+      }));
+    }
+
+    function getTotal() {
+      return getItems().reduce((sum, item) => sum + item.subtotal, 0);
+    }
+
+    function renderCart() {
+      const items = getItems();
+
+      document.getElementById("cartCount").textContent =
+        items.reduce((sum, item) => sum + item.quantity, 0);
+
+      document.getElementById("total").textContent = getTotal();
+
+      document.getElementById("cartItems").innerHTML = items.length
+        ? items.map(item => `
+          <div class="cart-row">
+            <div>
+              <strong>${item.name}</strong><br>
+              ₹${item.price} × ${item.quantity}
+            </div>
+            <div class="quantity">
+              <button type="button" aria-label="Decrease quantity"
+                onclick="changeQty('${item.product_id}', -1)">−</button>
+              <span>${item.quantity}</span>
+              <button type="button" aria-label="Increase quantity"
+                onclick="changeQty('${item.product_id}', 1)">+</button>
+            </div>
+          </div>
+        `).join("")
+        : "Your cart is empty.";
+    }
+
+    // 5. Account functions
+    const accountEmail = document.getElementById("account-email");
+    const accountPassword = document.getElementById("account-password");
+    const accountMessage = document.getElementById("account-message");
+    const signupButton = document.getElementById("account-signup");
+    const loginButton = document.getElementById("account-login");
+    const logoutButton = document.getElementById("account-logout");
+
+    function showAccountMessage(text) {
+      accountMessage.textContent = text;
+    }
+
+    function requireSupabase() {
+      if (!db) {
+        throw new Error(
+          "Supabase setup incomplete. Check the Project URL, publishable key and library."
+        );
+      }
+      return db;
+    }
+
+    function setShoppingAccess(isLoggedIn) {
+      const productsSection = document.getElementById("products");
+      const cartSection = document.getElementById("cartSection");
+      const checkoutSection = document.getElementById("checkout");
+      const productsNav = document.getElementById("productsNav");
+      const cartNav = document.getElementById("cartNav");
+      const shopNowLink = document.getElementById("shopNowLink");
+
+      productsSection.hidden = !isLoggedIn;
+      cartSection.hidden = !isLoggedIn;
+      checkoutSection.hidden = !isLoggedIn;
+      productsNav.hidden = !isLoggedIn;
+      cartNav.hidden = !isLoggedIn;
+
+      if (isLoggedIn) {
+        shopNowLink.href = "#products";
+        shopNowLink.querySelector("button").textContent = "SHOP NOW";
+      } else {
+        shopNowLink.href = "#account";
+        shopNowLink.querySelector("button").textContent = "LOGIN TO SHOP";
+      }
+    }
+
+    async function refreshAccount() {
+      if (!db) {
+        setShoppingAccess(false);
+        logoutButton.hidden = true;
+        signupButton.hidden = false;
+        loginButton.hidden = false;
+        showAccountMessage("Account setup is not ready. Check Supabase configuration.");
+        return;
+      }
+
+      try {
+        const { data, error } = await db.auth.getSession();
+        if (error) throw error;
+
+        const user = data.session?.user ?? null;
+        setShoppingAccess(Boolean(user));
+
+        if (user) {
+          showAccountMessage("Logged in: " + user.email);
+          logoutButton.hidden = false;
+          signupButton.hidden = true;
+          loginButton.hidden = true;
+        } else {
+          logoutButton.hidden = true;
+          signupButton.hidden = false;
+          loginButton.hidden = false;
+          showAccountMessage("Please log in or create an account to see products.");
+        }
+      } catch (error) {
+        setShoppingAccess(false);
+        logoutButton.hidden = true;
+        signupButton.hidden = false;
+        loginButton.hidden = false;
+        showAccountMessage("Please log in or create an account to see products.");
+        console.error("Account check failed:", error);
+      }
+    }
+
+    signupButton.addEventListener("click", async () => {
+      const email = accountEmail.value.trim();
+      const password = accountPassword.value;
+
+      if (!email || !accountEmail.validity.valid || password.length < 6) {
+        showAccountMessage("Enter a valid email and a password of at least 6 characters.");
+        return;
+      }
+
+      try {
+        showAccountMessage("Creating account...");
+        const { data, error } = await requireSupabase().auth.signUp({
+          email,
+          password,
+          options: {
+            emailRedirectTo: window.location.origin
+          }
+        });
+        if (error) throw error;
+
+        if (data.session) {
+          showAccountMessage("Account created and logged in!");
+        } else {
+          showAccountMessage("Signup submitted. Check your email for a confirmation link if required.");
+        }
+        await refreshAccount();
+      } catch (error) {
+        showAccountMessage("Signup error: " + error.message);
+      }
+    });
+
+    loginButton.addEventListener("click", async () => {
+      const email = accountEmail.value.trim();
+      const password = accountPassword.value;
+
+      if (!email || !accountEmail.validity.valid || !password) {
+        showAccountMessage("Enter a valid email and your password.");
+        return;
+      }
+
+      try {
+        showAccountMessage("Logging in...");
+        const { data, error } = await requireSupabase().auth.signInWithPassword({
+          email,
+          password
+        });
+        if (error) throw error;
+
+        showAccountMessage("Login successful: " + data.user.email);
+        await refreshAccount();
+      } catch (error) {
+        showAccountMessage("Login error: " + error.message);
+      }
+    });
+
+    logoutButton.addEventListener("click", async () => {
+      try {
+        const { error } = await requireSupabase().auth.signOut();
+        if (error) throw error;
+
+        showAccountMessage("Logged out.");
+        await refreshAccount();
+      } catch (error) {
+        showAccountMessage("Logout error: " + error.message);
+      }
+    });
+
+    // 6. Checkout and order submission
+    document.getElementById("orderForm").addEventListener("submit", async event => {
+      event.preventDefault();
+
+      const message = document.getElementById("order-message");
+      const button = document.getElementById("placeOrder");
+      const items = getItems();
+      const total = getTotal();
+
+      message.textContent = "";
+
+      if (!items.length) {
+        message.textContent = "Please add a product to your cart first.";
+        return;
+      }
+
+      if (!db) {
+        message.textContent = "Supabase setup incomplete. Check the Project URL and publishable key.";
+        return;
+      }
+
+      const { data: sessionData, error: sessionError } = await db.auth.getSession();
+      if (sessionError || !sessionData.session?.user) {
+        message.textContent = "Please log in before placing an order.";
+        setShoppingAccess(false);
+        document.getElementById("account").scrollIntoView({ behavior: "smooth" });
+        return;
+      }
+
+      const name = document.getElementById("customerName").value.trim();
+      const phone = document.getElementById("customerPhone").value.trim();
+      const address = document.getElementById("customerAddress").value.trim();
+      const payment = document.getElementById("payment").value;
+
+      if (!/^[6-9][0-9]{9}$/.test(phone)) {
+        message.textContent = "Please enter a valid 10-digit Indian mobile number.";
+        return;
+      }
+
+      button.disabled = true;
+      button.textContent = "SUBMITTING ORDER...";
+
+      try {
+        const { error } = await db.from("orders").insert([{
+          customer_name: name,
+          customer_phone: phone,
+          customer_address: address,
+          total_amount: total,
+          status: "New",
+          payment_method: payment,
+          items: items
+        }]);
+
+        if (error) throw error;
+
+        const orderId = "AV-" + Date.now().toString().slice(-8);
+
+        const orderText = [
+          "AVerio Website Order",
+          "Order ID: " + orderId,
+          "Name: " + name,
+          "Mobile: " + phone,
+          "Address: " + address,
+          "",
+          ...items.map(item =>
+            item.name + " × " + item.quantity + " = ₹" + item.subtotal
+          ),
+          "",
+          "Total: ₹" + total,
+          "Payment: " + payment
+        ].join("\n");
+
+        message.textContent =
+          "Order saved successfully! Order ID: " + orderId +
+          ". Your order has been recorded on the website.";
+
+        for (const key of Object.keys(cart)) delete cart[key];
+        renderCart();
+        document.getElementById("orderForm").reset();
+
+        // Keep the order on the website; do not redirect to WhatsApp.
+        // The order record is saved in Supabase above.
+
+      } catch (error) {
+        console.error("Order submission failed:", error);
+        message.textContent = "Order could not be saved: " + error.message;
+      } finally {
+        button.disabled = false;
+        button.textContent = "PLACE ORDER";
+      }
+    });
+
+    // 7. Start the page
+    document.getElementById("year").textContent = new Date().getFullYear();
+    renderProducts();
+    renderCart();
+    setShoppingAccess(false);
+    refreshAccount();
+
+    if (db) {
+      db.auth.onAuthStateChange(() => {
+        refreshAccount();
+      });
+    }
+  </script>
+</body>
+</html>
 ```
