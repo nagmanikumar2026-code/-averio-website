@@ -6,8 +6,6 @@
   <title>AVerio | Phone Accessories</title>
   <meta name="description" content="Shop phone accessories at AVerio. Smart Accessories. Smart Choice.">
 
-  <!-- Supabase library: load once before our app code -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
     :root {
@@ -424,27 +422,36 @@
     © <span id="year"></span> AVerio
   </footer>
 
-  <script>
+  <script type="module">
+    // Load Supabase as an ES module so the site does not depend on a global window.supabase.
+    let createSupabaseClient = null;
+    let supabaseLibraryError = null;
+    try {
+      const supabaseModule = await import("https://esm.sh/@supabase/supabase-js@2");
+      createSupabaseClient = supabaseModule.createClient;
+    } catch (error) {
+      supabaseLibraryError = error;
+      console.error("Could not load Supabase library:", error);
+    }
+
     // 1. Supabase project configuration
     const SUPABASE_URL = "https://osygbpfgxpxrzkfcbwgo.supabase.co";
 
-    // Replace this placeholder with your real Supabase Publishable key.
     const SUPABASE_KEY = "sb_publishable_4nitgew7mAjfWu8cPpY0bA_Cbik013P";
     const SHOP_WHATSAPP = "916204277290";
     let db = null;
 
     try {
-      if (
-        window.supabase &&
-        SUPABASE_KEY.startsWith("sb_publishable_") &&
-        SUPABASE_KEY !== "PASTE_YOUR_PUBLISHABLE_KEY_HERE"
-      ) {
-        db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-      } else {
-        console.error("Supabase library or publishable key is missing.");
+      if (typeof createSupabaseClient !== "function") {
+        throw new Error("Supabase library load nahi hui. Internet/CDN connection check karein.");
       }
+      if (!SUPABASE_URL.startsWith("https://") || !SUPABASE_KEY.startsWith("sb_publishable_")) {
+        throw new Error("Supabase Project URL ya Publishable Key ka format galat hai.");
+      }
+      db = createSupabaseClient(SUPABASE_URL, SUPABASE_KEY);
+      console.info("Supabase client initialized.");
     } catch (error) {
-      console.error("Supabase initialization error:", error);
+      console.error("Supabase initialization error:", error, supabaseLibraryError || "");
     }
 
     // 2. Products
@@ -516,6 +523,9 @@
       if (cart[id] <= 0) delete cart[id];
       renderCart();
     }
+    // Keep functions available to the existing inline product/cart buttons.
+    window.addToCart = addToCart;
+    window.changeQty = changeQty;
 
     function getItems() {
       return products.filter(p => cart[p.id]).map(p => ({
@@ -608,7 +618,9 @@
         logoutButton.hidden = true;
         signupButton.hidden = false;
         loginButton.hidden = false;
-        showAccountMessage("Account setup is not ready. Check Supabase configuration.");
+        showAccountMessage(supabaseLibraryError
+          ? "Supabase library load nahi hui. Internet connection ya CDN block check karein."
+          : "Supabase setup not ready. Project URL/Publishable Key check karein.");
         return;
       }
 
@@ -764,20 +776,6 @@
 
         const orderId = "AV-" + Date.now().toString().slice(-8);
 
-        const orderText = [
-          "AVerio Website Order",
-          "Order ID: " + orderId,
-          "Name: " + name,
-          "Mobile: " + phone,
-          "Address: " + address,
-          "",
-          ...items.map(item =>
-            item.name + " × " + item.quantity + " = ₹" + item.subtotal
-          ),
-          "",
-          "Total: ₹" + total,
-          "Payment: " + payment
-        ].join("\n");
 
         message.textContent =
           "Order saved successfully! Order ID: " + orderId +
